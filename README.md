@@ -6,17 +6,21 @@ Install [Libbitcoin Explorer](https://github.com/libbitcoin/libbitcoin-explorer/
 
     brew install bx
 
-Clone this repository.
+Install pwgen.
 
-    git clone https://github.com/pingu342/search_bitcoin.git
+    brew install pwgen
 
 Install dependent python packages.
 
-    cd search_bitcoin
     pip install pysocks
     pip install pycoin
 
-Find the Electrum Server and set its hostname and port number to ELECTRS_HOST, ELECTRS_PORT in electrs_getaddressbalance.py
+Clone this repository.
+
+    git clone https://github.com/pingu342/search_bitcoin.git
+    cd search_bitcoin
+    
+Find the Electrum Server and set its address to ELECTRS_HOST, ELECTRS_PORT in electrs_getaddressbalance.py
 
 # Random Search
 
