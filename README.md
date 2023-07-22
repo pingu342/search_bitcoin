@@ -20,17 +20,17 @@ Clone this repository.
     git clone https://github.com/pingu342/search_bitcoin.git
     cd search_bitcoin
     
-Find the Electrum Server and set its address to ELECTRS_HOST, ELECTRS_PORT in electrs_getaddressbalance.py
+Get the Electrum Server and set its address to ELECTRS_HOST, ELECTRS_PORT in electrs_getaddressbalance.py
 
 # Random Search
 
     ./random_search.sh NUM
 
-This script generate a password of NUM bytes and hash the password using sha256 as the private key.
+This script generate a NUM character password, hash it using sha256, and use it as a private key.
 
 Next, generate a P2PKH address from the private key.
 
-Finally, check the balance of P2PKH addresses.
+Finally, check the balance of P2PKH addresse.
 
 ex. NUM=3
 
@@ -42,17 +42,17 @@ ex. NUM=3
     Address : 1QCi1GSnYovFdiDEVjArJrPKsb8yueGosj
     Balance : {'id': 0, 'jsonrpc': '2.0', 'result': {'confirmed': 0, 'unconfirmed': 0}}
 
-The input field above will be present the generated password of 3 bytes.
+The Input field above shows the generated 3-character password.
 
 If **confirmed** or **unconfirmed** are not zero, the address have bitcoin.
 
-# Dictionary search
+# Dictionary Search
 
     ./dictionary_search.sh FILE
 
 This script uses the passwords in FILE.
 
-Other things are the same as random_search.sh.
+Otherwise, it is the same as the random search above.
 
 ex. FILE=sample_dictionary
 
@@ -66,11 +66,11 @@ ex. FILE=sample_dictionary
 
 # Check log files
 
-Sum all **confirmed** and **unconfirmed**.
-
     python check_log.py random_search.log
 
-Check multiple log files at once.
+This script sums all **confirmed** and **unconfirmed**.
+
+If you want to check multiple log files at once.
 
     python check_log.py "`ls *.log`"
 
