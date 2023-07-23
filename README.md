@@ -35,6 +35,17 @@ Sort the list and then split it. (It takes time)
 
     ./split_addresses.sh blockchair_bitcoin_addresses_latest.tsv
 
+Count the number of addresses.
+
+    python count_address.py sorted-blockchair_bitcoin_addresses_latest.tsv.splitted-*
+
+ex.
+
+    p2pkh: 22681435 / 48543080 (46.7 %)
+    p2sh : 9004736 / 48543080 (18.5 %)
+    p2w  : 16009440 / 48543080 (33.0 %)
+    other: 847469 / 48543080 (1.7 %)
+
 # Check the balance of the bitcoin address
 
     echo -n ADDRESS | ./getaddressbalance.sh
