@@ -20,7 +20,7 @@ Clone this repository.
     git clone https://github.com/pingu342/search_bitcoin.git
     cd search_bitcoin
     
-(Optional) Set the Electrum Server to ELECTRS_HOST, ELECTRS_PORT in electrs_getaddressbalance.py
+(Optional) Set the Electrum Server to `ELECTRS_HOST`, `ELECTRS_PORT` in electrs_getaddressbalance.py
 
 # Obtaining a list of Bitcoin addresses
 
