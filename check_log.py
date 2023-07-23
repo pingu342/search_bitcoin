@@ -1,32 +1,39 @@
 import re
-import ast
+#import ast
 import sys
+import glob
 
-key = 0
-btc = 0
+keys = 0
+satoshi = 0
 
-files = re.split(r'[\s\r\t]+', sys.argv[1])
+files = []
+args = sys.argv[1:]
+for arg in args:
+    array = glob.glob(arg)
+    files.extend(array)
 
 for file in (files):
     print(file)
     with open(file) as f:
-        for l in f:
-            if re.search('Balance : ', l):
-                l = l.strip()
-                b = l.split('Balance : ')
+        i = 0
+        for line in f:
+            if re.search('Balance : ', line):
+                line = line.strip()
+                array = line.split('Balance : ')
                 try:
-                    b = ast.literal_eval(b[1])
-                    n = b['result']['confirmed']
-                    n += b['result']['unconfirmed']
-                    btc += n
+                    #json = ast.literal_eval(array[1])
+                    #n = json['result']['confirmed']
+                    #n += json['result']['unconfirmed']
+                    if len(array) < 2:
+                        raise Exception('parse error')
+                    n = int(array[1])
                     if n > 0:
-                        print(l)
-                    key += 1
+                        print('[%d] %s' % (i, line))
+                    satoshi += n
+                    keys += 1
                 except Exception as e:
-                    print(b[1])
+                    print('[%d] %s' % (i, line))
+            i += 1
 
-key_space = 2**256
-coverage = key / key_space * 100
+print('Total %d satoshi found in %d keys.' % (satoshi, keys))
 
-print('%d BTC found from %d keys.' % (btc, key))
-print('coverage %e [%%]' % (coverage))

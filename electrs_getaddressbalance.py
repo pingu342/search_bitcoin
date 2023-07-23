@@ -40,6 +40,11 @@ s.sendall(req)
 res = s.recv(4096)
 
 # Parse Response
-res = json.loads(res)
-print(res)
+try:
+    res = json.loads(res)
+    balance = res['result']['confirmed']
+    balance += res['result']['unconfirmed']
+    print(balance)
+except:
+    print('error')
 
