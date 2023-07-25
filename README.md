@@ -4,7 +4,7 @@ To check Bitcoin balance, we need an Electrum server.
 
 Alternatively, download a list of Bitcoin addresses and balances in advance. Then we don't need an Electrum server. [see here](https://github.com/pingu342/search_bitcoin/edit/main/README.md#obtaining-a-list-of-bitcoin-addresses)
 
-- macOS
+- macOS user
   
     Install [Libbitcoin Explorer](https://github.com/libbitcoin/libbitcoin-explorer/tree/version3).
 
@@ -30,7 +30,7 @@ Alternatively, download a list of Bitcoin addresses and balances in advance. The
 
         ./random_search.sh 1 electrs
 
-- Docker
+- Docker user
 
     Run the ubuntu:20.04 Docker image.
   
