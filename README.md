@@ -1,26 +1,109 @@
 # Install
 
-Use macOS.
+To check Bitcoin balance, we need an Electrum server.
 
-Install [Libbitcoin Explorer](https://github.com/libbitcoin/libbitcoin-explorer/tree/version3).
+Alternatively, download a list of Bitcoin addresses and balances in advance. Then we don't need an Electrum server. [see here](https://github.com/pingu342/search_bitcoin/edit/main/README.md#obtaining-a-list-of-bitcoin-addresses)
 
-    brew install bx
+- macOS
+  
+    Install [Libbitcoin Explorer](https://github.com/libbitcoin/libbitcoin-explorer/tree/version3).
 
-Install pwgen.
-
-    brew install pwgen
-
-(Optional) Install dependent python packages.
-
-    pip install pysocks
-    pip install pycoin
-
-Clone this repository.
-
-    git clone https://github.com/pingu342/search_bitcoin.git
-    cd search_bitcoin
+        brew install bx
+  
+    Install pwgen.
     
-(Optional) Set the Electrum Server to `ELECTRS_HOST`, `ELECTRS_PORT` in electrs_getaddressbalance.py
+        brew install pwgen
+    
+    Install dependent python packages.
+    
+        pip install pysocks
+        pip install pycoin
+    
+    Clone this repository.
+    
+        git clone https://github.com/pingu342/search_bitcoin.git
+        cd search_bitcoin
+        
+    Set the Electrum Server to `ELECTRS_HOST`, `ELECTRS_PORT` in electrs_getaddressbalance.py
+    
+    Perform a random search.
+
+        ./random_search.sh 1 electrs
+
+- Docker
+
+    Run the ubuntu:20.04 Docker image.
+  
+        docker pull ubuntu:20.04
+        docker run --name test -itd ubuntu:20.04
+        docker exec -it test /bin/bash
+
+    Install build tools for building [Libbitcoin Explorer](https://github.com/libbitcoin/libbitcoin-explorer/tree/version3) on ubuntu.
+
+        apt update
+        apt upgrade
+        apt install g++
+        apt install clang-11
+        update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-11 50
+        update-alternatives --install /usr/bin/clang clang /usr/bin/clang-11 50
+        apt install build-essential autoconf automake libtool pkg-config git wget
+
+    Build Libbitcoin on ubuntu.
+  
+        cd ~/
+        git clone https://github.com/libbitcoin/libbitcoin-explorer.git
+        cd libbitcoin-explorer
+        git checkout version3
+        ./install.sh --with-icu --build-icu --build-boost --build-zmq
+        bx
+
+    Remove unnecessary items to reduce ubuntu storage space.
+  
+        cd ..
+        rm -rf libbitcoin-explorer
+        apt remove build-essential autoconf automake libtool pkg-config
+        apt remove g++ clang-11
+        apt autoremove
+        exit
+
+    Create a Docker image from a container with Libbitcoin installed.
+  
+        docker stop test
+        docker commit test ubuntu_libbitcoin
+        docker image ls
+        docker container rm test
+
+    Try to run the Docker image and run the bx command.
+
+        docker run --name test -itd ubuntu_libbitcoin
+        docker exec -it test /bin/bash
+        bx
+        exit
+        docker container rm test
+
+    Create a volume and container to run search_bitcoin.
+
+        docker volume create ubuntu_libbitcoin_vol
+        docker run -v ubuntu_libbitcoin_vol:/root/data --add-host=<hostname>:<ipaddr> --name test -itd ubuntu_libbitcoin
+
+    For `hostname` and `ipaddr`, specify the Docker host's.  These are used when Electrum Server runs on a Docker host.
+  
+    Run the container and install search_bitcoin and dependencies.
+
+        docker exec -it test /bin/bash
+        apt install python3 python3-pip pwgen vim
+        update-alternatives --install /usr/bin/python python /usr/bin/python3 1
+        pip install pysocks pycoin
+        cd ~/data
+        git clone https://github.com/pingu342/search_bitcoin
+        cd search_bitcoin/
+
+    Set the Electrum Server to `ELECTRS_HOST`, `ELECTRS_PORT` in electrs_getaddressbalance.py
+
+    Perform a random search.
+
+        ./random_search.sh 1 electrs
+
 
 # Obtaining a list of Bitcoin addresses
 
@@ -48,33 +131,40 @@ ex.
 
 # Check the balance of the bitcoin address
 
-    echo -n ADDRESS | ./getaddressbalance.sh
-
-(Optinal) When using a Electrum Server
+When using a Electrum Server.
 
     echo -n ADDRESS | ./getaddressbalance.sh electrs
 
+When using a bitcoin address list.
+
+    echo -n ADDRESS | ./getaddressbalance.sh
+
 # Check the balance of the private key generated from the seed
+
+When using a bitcoin address list.
+
+    echo -n SEED | ./getkeybalance.sh electrs
+
+When using a bitcoin address list.
 
     echo -n SEED | ./getkeybalance.sh
 
-(Optinal) When using a Electrum Server
-
-    echo -n SEED | ./getkeybalance.sh electrs
     
 # Random Search
 
-    ./random_search.sh NUM
+Generate a NUM character seed, hash it using sha256, and use it as private key.
 
-(Optinal) When using a Electrum Server
+Next, generate a P2PKH address from a private key.
+
+Finally, check the balance of P2PKH address.
+
+When using a Electrum Server.
 
     ./random_search.sh NUM electrs
 
-This script generate a NUM character seed, hash it using sha256, and use it as a private key.
+When using a bitcoin address list.
 
-Next, generate a P2PKH address from the private key.
-
-Finally, check the balance of P2PKH addresse.
+    ./random_search.sh NUM
 
 ex. NUM=3
 
@@ -92,15 +182,15 @@ If Balance field is not zero, the address have bitcoin.
 
 # Dictionary Search
 
-    ./dictionary_search.sh FILE
+Use the seed written in FILE.　Otherwise, it is the same as the random search above.
 
-(Optinal) When using a Electrum Server
+When using a Electrum Server.
 
     ./dictionary_search.sh FILE electrs
 
-This script uses the seed in FILE.
+When using a bitcoin address list.
 
-Otherwise, it is the same as the random search above.
+    ./dictionary_search.sh FILE
 
 ex. FILE=sample_dictionary
 
@@ -114,9 +204,9 @@ ex. FILE=sample_dictionary
 
 # Check log files
 
-    python check_log.py random_search.log
-
 This script sums all balance in log.
+
+    python check_log.py random_search.log
 
 If you want to check multiple log files at once.
 
