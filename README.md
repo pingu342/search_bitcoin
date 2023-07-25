@@ -2,7 +2,7 @@
 
 To check Bitcoin balance, we need an Electrum server.
 
-Alternatively, download a list of Bitcoin addresses and balances in advance. Then we don't need an Electrum server. [see here](https://github.com/pingu342/search_bitcoin/edit/main/README.md#obtaining-a-list-of-bitcoin-addresses)
+Alternatively, download a list of Bitcoin addresses and balances in advance. Then we don't need an Electrum server. [see here](https://github.com/pingu342/search_bitcoin#obtaining-a-list-of-bitcoin-addresses)
 
 - macOS user
   
